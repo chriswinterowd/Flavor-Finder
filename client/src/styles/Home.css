@@ -1,0 +1,21 @@
+.home {
+    display: flex;
+    flex-direction: column; /* Stack elements vertically */
+    align-items: center; /* Center horizontally */
+    padding-top: 4rem; /* Adjust padding to give space for the navbar */
+  }
+  
+  .title {
+    font-size: 3rem;
+    font-weight: bold;
+    color: black;
+    margin-bottom: 2rem; /* Space between title and categories */
+  }
+  
+  .categories {
+    display: flex;
+    justify-content: center; /* Center the categories horizontally */
+    gap: 2rem; /* Add space between the categories */
+    flex-wrap: wrap; /* Allow the categories to wrap if needed */
+  }
+  

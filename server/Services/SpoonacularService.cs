@@ -10,7 +10,7 @@ namespace FlavorFinder.Services
     public class SpoonacularService
     {
         private readonly HttpClient _httpClient;
-        private readonly string _apiKey;
+        private readonly string? _apiKey;
 
         public SpoonacularService(HttpClient httpClient, IConfiguration configuration)
         {
@@ -31,14 +31,12 @@ namespace FlavorFinder.Services
             }
 
             var json = await response.Content.ReadAsStringAsync();
-            var spoonacularResponse = JsonSerializer.Deserialize<SpoonacularService>(json);
+
+            var spoonacularResponse = JsonSerializer.Deserialize<SpoonacularResponse>(json);
 
             return spoonacularResponse?.Recipes ?? new List<Recipe>();
         }
     }
 
-    public class SpoonacularResponse
-    {
-        public List<Recipe> Recipes { get; set; }
-    }
+
 }

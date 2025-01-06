@@ -1,4 +1,9 @@
+using FlavorFinder.Services;
+
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Logging.ClearProviders();
+builder.Logging.AddConsole();
 
 // Add services to the container
 builder.Services.AddHttpClient(); // Register HttpClient for API calls

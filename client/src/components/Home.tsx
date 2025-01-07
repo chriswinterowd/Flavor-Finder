@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import {
   Coffee,
   UtensilsCrossed,
@@ -49,8 +50,15 @@ const cuisineTypes = [
 ];
 
 const Home: React.FC = () => {
-  const [selectedMeal, setSelectedMeal] = useState<string>("Any");
-  const [selectedCuisine, setSelectedCuisine] = useState<string>("Any");
+  const [selectedMeal, setSelectedMeal] = useState("Any");
+  const [selectedCuisine, setSelectedCuisine] = useState("Any");
+  const navigate = useNavigate();
+
+  const handleFindFlavor = () => {
+    navigate(
+      `/recipe?number=1&meal=${selectedMeal}&cuisine=${selectedCuisine}`
+    );
+  };
 
   return (
     <main className="max-w-4xl mx-auto px-4 py-8">
@@ -69,7 +77,7 @@ const Home: React.FC = () => {
               selectedMeal === name
                 ? "bg-orange-100 border-orange-500"
                 : "bg-white border-gray-100"
-            } shadow-sm hover:shadow-md transition-all duration-200 border flex flex-col items-center justify-center gap-2 group`}
+            } shadow-sm hover:shadow-md transition-all duration-200 border-2 flex flex-col items-center justify-center gap-2 group`}
           >
             <Icon
               size={24}
@@ -108,7 +116,10 @@ const Home: React.FC = () => {
         </div>
       </div>
       <div className="text-center">
-        <button className="px-8 py-3 bg-orange-600 text-white rounded-md hover:bg-orange-700 transition-colors font-semibold shadow-sm hover:shadow-md">
+        <button
+          onClick={handleFindFlavor}
+          className="px-8 py-3 bg-orange-600 text-white rounded-md hover:bg-orange-700 transition-colors font-semibold shadow-sm hover:shadow-md"
+        >
           Find Flavor
         </button>
       </div>

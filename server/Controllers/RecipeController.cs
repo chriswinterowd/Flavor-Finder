@@ -6,7 +6,6 @@ namespace FlavorFinder.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-
     public class RecipeController : ControllerBase
     {
         private readonly SpoonacularService _spoonacularService;

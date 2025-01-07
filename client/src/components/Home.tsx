@@ -10,54 +10,52 @@ import {
 } from "lucide-react";
 
 const mealTypes = [
-  { name: "Any", icon: Shuffle },
-  { name: "Breakfast", icon: Coffee },
-  { name: "Lunch", icon: Sandwich },
-  { name: "Dinner", icon: UtensilsCrossed },
-  { name: "Snack", icon: Cookie },
-  { name: "Dessert", icon: IceCream },
+  { name: "any", icon: Shuffle },
+  { name: "breakfast", icon: Coffee },
+  { name: "lunch", icon: Sandwich },
+  { name: "dinner", icon: UtensilsCrossed },
+  { name: "snack", icon: Cookie },
+  { name: "dessert", icon: IceCream },
 ];
 
 const cuisineTypes = [
-  "Any",
-  "African",
-  "Asian",
-  "American",
-  "British",
-  "Cajun",
-  "Caribbean",
-  "Chinese",
-  "Eastern European",
-  "European",
-  "French",
-  "German",
-  "Greek",
-  "Indian",
-  "Irish",
-  "Italian",
-  "Japanese",
-  "Jewish",
-  "Korean",
-  "Latin American",
-  "Mediterranean",
-  "Mexican",
-  "Middle Eastern",
-  "Nordic",
-  "Southern",
-  "Spanish",
-  "Thai",
-  "Vietnamese",
+  "any",
+  "african",
+  "asian",
+  "american",
+  "british",
+  "cajun",
+  "caribbean",
+  "chinese",
+  "eastern European",
+  "european",
+  "french",
+  "german",
+  "greek",
+  "indian",
+  "irish",
+  "italian",
+  "japanese",
+  "jewish",
+  "korean",
+  "latin american",
+  "mediterranean",
+  "mexican",
+  "middle Eastern",
+  "nordic",
+  "southern",
+  "spanish",
+  "thai",
+  "vietnamese",
 ];
 
 const Home: React.FC = () => {
-  const [selectedMeal, setSelectedMeal] = useState("Any");
-  const [selectedCuisine, setSelectedCuisine] = useState("Any");
+  const [selectedMeal, setSelectedMeal] = useState("any");
+  const [selectedCuisine, setSelectedCuisine] = useState("any");
   const navigate = useNavigate();
 
   const handleFindFlavor = () => {
-    navigate(
-      `/recipe?number=1&meal=${selectedMeal}&cuisine=${selectedCuisine}`
-    );
+    navigate(`/recipe?meal=${selectedMeal}&cuisine=${selectedCuisine}`);
   };
 
   return (
@@ -77,7 +75,7 @@ const Home: React.FC = () => {
               selectedMeal === name
                 ? "bg-orange-100 border-orange-500"
                 : "bg-white border-gray-100"
-            } shadow-sm hover:shadow-md transition-all duration-200 border-2 flex flex-col items-center justify-center gap-2 group`}
+            } shadow-sm hover:shadow-md transition-all duration-200 border flex flex-col items-center justify-center gap-2 group`}
           >
             <Icon
               size={24}

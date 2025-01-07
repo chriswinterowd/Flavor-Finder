@@ -16,11 +16,11 @@ namespace FlavorFinder.Controllers
         }
 
         [HttpGet("random")]
-        public async Task<ActionResult<List<Recipe>>> GetRandomRecipes([FromQuery] int number = 3)
+        public async Task<ActionResult<List<Recipe>>> GetRandomRecipes([FromQuery] int number = 1, string meal = "Any", string cuisine = "Any")
         {
             try
             {
-                var recipes = await _spoonacularService.GetRandomRecipes(number);
+                var recipes = await _spoonacularService.GetRandomRecipes(number, meal, cuisine);
 
                 if (recipes == null || recipes.Count == 0)
                 {

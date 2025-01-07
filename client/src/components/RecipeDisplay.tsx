@@ -53,9 +53,9 @@ const RecipeDisplay: React.FC = () => {
         const data = await response.json();
 
         console.log(data);
-        // Unwrap the recipe from the array
+
         if (Array.isArray(data) && data.length > 0) {
-          setRecipe(data[0]); // Use the first recipe
+          setRecipe(data[0]);
         } else {
           console.error("No recipes found in the response.");
           setRecipe(null);

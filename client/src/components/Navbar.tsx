@@ -2,7 +2,11 @@ import React from "react";
 import { Home, Heart, LogIn } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
-const Navbar: React.FC = () => {
+interface NavbarProps {
+  onOpenAuthModal: () => void;
+}
+
+export function Navbar({ onOpenAuthModal }: NavbarProps) {
   const navigate = useNavigate();
 
   return (
@@ -30,7 +34,7 @@ const Navbar: React.FC = () => {
               <span>Favorites</span>
             </button>
             <button
-              onClick={() => navigate("/login")}
+              onClick={onOpenAuthModal}
               className="flex items-center space-x-1 px-4 py-2 rounded-md bg-orange-600 text-white hover:bg-orange-700"
             >
               <LogIn size={20} />
@@ -41,6 +45,4 @@ const Navbar: React.FC = () => {
       </div>
     </nav>
   );
-};
-
-export default Navbar;
+}

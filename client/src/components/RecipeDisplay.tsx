@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
-
+import { useNavigate, useLocation } from "react-router-dom";
 import {
   Heart,
   Clock,
@@ -9,7 +8,6 @@ import {
   ChefHat,
   Soup,
 } from "lucide-react";
-import { useLocation } from "react-router-dom";
 
 interface Ingredient {
   id: number;
@@ -18,13 +16,16 @@ interface Ingredient {
   unit: string;
   image: string;
 }
+
 interface Instruction {
   number: number;
   step: string;
 }
+
 interface RecipeInstructions {
   steps: Instruction[];
 }
+
 interface Recipe {
   id: number;
   title: string;
@@ -38,11 +39,10 @@ interface Recipe {
   analyzedInstructions: RecipeInstructions[];
 }
 
-const RecipeDisplay: React.FC = () => {
+export function RecipeDisplay() {
   const [recipe, setRecipe] = useState<Recipe | null>(null);
   const location = useLocation();
 
-  // Parse query parameters
   const queryParams = new URLSearchParams(location.search);
   const meal = queryParams.get("meal");
   const cuisine = queryParams.get("cuisine");
@@ -57,8 +57,8 @@ const RecipeDisplay: React.FC = () => {
       try {
         const response = await fetch(
           `http://localhost:5000/api/recipe/random?number=1&meal=${
-            meal == "any" ? "" : meal
-          }&cuisine=${cuisine == "any" ? "" : cuisine}`
+            meal === "any" ? "" : meal
+          }&cuisine=${cuisine === "any" ? "" : cuisine}`
         );
 
         const data = await response.json();
@@ -189,6 +189,4 @@ const RecipeDisplay: React.FC = () => {
       </div>
     </div>
   );
-};
-
-export default RecipeDisplay;
+}

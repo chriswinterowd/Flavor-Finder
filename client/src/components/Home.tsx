@@ -49,7 +49,7 @@ const cuisineTypes = [
   "vietnamese",
 ];
 
-const Home: React.FC = () => {
+export function Home() {
   const [selectedMeal, setSelectedMeal] = useState("any");
   const [selectedCuisine, setSelectedCuisine] = useState("any");
   const navigate = useNavigate();
@@ -123,6 +123,4 @@ const Home: React.FC = () => {
       </div>
     </main>
   );
-};
-
-export default Home;
+}

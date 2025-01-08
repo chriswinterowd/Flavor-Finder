@@ -1,4 +1,6 @@
 import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+
 import {
   Heart,
   Clock,
@@ -26,6 +28,8 @@ interface RecipeInstructions {
 interface Recipe {
   id: number;
   title: string;
+  readyInMinutes: number;
+  servings: number;
   image: string;
   summary: string;
   cuisines: string[];
@@ -42,6 +46,11 @@ const RecipeDisplay: React.FC = () => {
   const queryParams = new URLSearchParams(location.search);
   const meal = queryParams.get("meal");
   const cuisine = queryParams.get("cuisine");
+
+  const navigate = useNavigate();
+  const handleFindNewFlavor = () => {
+    navigate("/");
+  };
 
   useEffect(() => {
     const fetchRecipe = async () => {
@@ -102,11 +111,11 @@ const RecipeDisplay: React.FC = () => {
       <div className="flex flex-wrap gap-6 mb-6">
         <div className="flex items-center gap-2 text-gray-600">
           <Clock size={20} />
-          <span>45 minutes</span>
+          <span>{`${recipe.readyInMinutes} minutes`}</span>
         </div>
         <div className="flex items-center gap-2 text-gray-600">
           <Users size={20} />
-          <span>6 servings</span>
+          <span>{`${recipe.servings} servings`}</span>
         </div>
       </div>
       <div className="aspect-video w-full bg-gray-100 rounded-lg overflow-hidden mb-8">
@@ -168,7 +177,7 @@ const RecipeDisplay: React.FC = () => {
       <div className="flex justify-center gap-4 mt-8">
         <button
           className="px-6 py-3 bg-orange-600 text-white rounded-md hover:bg-orange-700 transition-colors font-semibold flex items-center gap-2"
-          onClick={() => window.location.reload()} // Replace with your "Find New Flavor" logic
+          onClick={handleFindNewFlavor}
         >
           <ChefHat size={20} />
           Find New Flavor

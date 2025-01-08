@@ -7,8 +7,8 @@ import RecipeDisplay from "./components/RecipeDisplay";
 const App = () => {
   return (
     <div className="min-h-screen w-full bg-orange-50">
-      <Navbar />
       <Router>
+        <Navbar />
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/recipe" element={<RecipeDisplay />} />

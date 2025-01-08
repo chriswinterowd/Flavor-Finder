@@ -47,7 +47,9 @@ const RecipeDisplay: React.FC = () => {
     const fetchRecipe = async () => {
       try {
         const response = await fetch(
-          `http://localhost:5000/api/recipe/random?number=1&meal=${meal}&cuisine=${cuisine}`
+          `http://localhost:5000/api/recipe/random?number=1&meal=${
+            meal == "any" ? "" : meal
+          }&cuisine=${cuisine == "any" ? "" : cuisine}`
         );
 
         const data = await response.json();

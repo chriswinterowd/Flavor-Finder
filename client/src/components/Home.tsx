@@ -50,8 +50,8 @@ const cuisineTypes = [
 ];
 
 const Home: React.FC = () => {
-  const [selectedMeal, setSelectedMeal] = useState("any");
-  const [selectedCuisine, setSelectedCuisine] = useState("any");
+  const [selectedMeal, setSelectedMeal] = useState("");
+  const [selectedCuisine, setSelectedCuisine] = useState("");
   const navigate = useNavigate();
 
   const handleFindFlavor = () => {

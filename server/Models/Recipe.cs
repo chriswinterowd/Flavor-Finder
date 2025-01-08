@@ -10,6 +10,12 @@ namespace FlavorFinder.Models
         [JsonPropertyName("title")]
         public string? Title { get; set; }
 
+        [JsonPropertyName("readyInMinutes")]
+        public int? ReadyInMinutes { get; set; }
+
+        [JsonPropertyName("servings")]
+        public int? Servings { get; set; }
+
         [JsonPropertyName("image")]
         public string? Image { get; set; }
 

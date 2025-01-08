@@ -16,7 +16,7 @@ namespace FlavorFinder.Controllers
         }
 
         [HttpGet("random")]
-        public async Task<ActionResult<List<Recipe>>> GetRandomRecipes([FromQuery] int number = 1, string meal = "Any", string cuisine = "Any")
+        public async Task<ActionResult<List<Recipe>>> GetRandomRecipes([FromQuery] int number = 1, string meal = "", string cuisine = "")
         {
             try
             {

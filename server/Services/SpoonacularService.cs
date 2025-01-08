@@ -19,18 +19,18 @@ namespace FlavorFinder.Services
             _apiKey = configuration["Spoonacular:ApiKey"];
         }
 
-        public async Task<List<Recipe>> GetRandomRecipes(int number = 3, string meal = "any", string cuisine = "any")
+        public async Task<List<Recipe>> GetRandomRecipes(int number = 1, string meal = "", string cuisine = "")
         {
-            var url = $"https://api.spoonacular.com/recipes/random?number={number}&include-tags={meal},{cuisine}&apiKey={_apiKey}";
+            var baseUrl = "https://api.spoonacular.com/recipes/random";
 
+            var tags = string.Join(",", new[] { meal, cuisine }.Where(tag => string.IsNullOrWhiteSpace(tag)));
+            Console.WriteLine("tags " + tags);
+            var queryParams = $"number={number}" + (!string.IsNullOrWhiteSpace(tags) ? "" : $"&include-tags={tags}") + $"&apiKey={_apiKey}";
 
+            var apiUrl = $"{baseUrl}?{queryParams}";
 
-
-
-
-
-            Console.WriteLine(url);
-            var response = await _httpClient.GetAsync(url);
+            Console.WriteLine(apiUrl);
+            var response = await _httpClient.GetAsync(apiUrl);
 
             if (!response.IsSuccessStatusCode)
             {

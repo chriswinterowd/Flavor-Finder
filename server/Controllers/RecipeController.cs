@@ -20,6 +20,7 @@ namespace FlavorFinder.Controllers
         {
             try
             {
+                Console.WriteLine("parameters " + meal + cuisine);
                 var recipes = await _spoonacularService.GetRandomRecipes(number, meal, cuisine);
 
                 if (recipes == null || recipes.Count == 0)

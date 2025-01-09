@@ -23,9 +23,9 @@ namespace FlavorFinder.Services
         {
             var baseUrl = "https://api.spoonacular.com/recipes/random";
 
-            var tags = string.Join(",", new[] { meal, cuisine }.Where(tag => string.IsNullOrWhiteSpace(tag)));
-            Console.WriteLine("tags " + tags);
-            var queryParams = $"number={number}" + (!string.IsNullOrWhiteSpace(tags) ? "" : $"&include-tags={tags}") + $"&apiKey={_apiKey}";
+            var tags = string.Join(",", new[] { meal, cuisine }.Where(tag => !string.IsNullOrWhiteSpace(tag)));
+            Console.WriteLine("tags " + tags + " " + meal + cuisine + string.IsNullOrWhiteSpace(tags));
+            var queryParams = $"number={number}" + (!string.IsNullOrWhiteSpace(tags) ? $"&include-tags={tags}" : "") + $"&apiKey={_apiKey}";
 
             var apiUrl = $"{baseUrl}?{queryParams}";
 

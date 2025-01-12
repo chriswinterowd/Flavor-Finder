@@ -14,15 +14,15 @@ namespace FlavorFinder.Repositories
             _signInManager = signInManager;
         }
 
-        public async Task<IdentityResult> RegisterUserAsync(string email, string password)
+        public async Task<IdentityResult> RegisterUserAsync(string username, string email, string password)
         {
-            var user = new IdentityUser { UserName = email, Email = email };
+            var user = new IdentityUser { UserName = username, Email = email };
             return await _userManager.CreateAsync(user, password);
         }
 
-        public async Task<SignInResult> LoginUserAsync(string email, string password, bool rememberMe)
+        public async Task<SignInResult> LoginUserAsync(string username, string password, bool rememberMe)
         {
-            return await _signInManager.PasswordSignInAsync(email, password, isPersistent: rememberMe, lockoutOnFailure: false);
+            return await _signInManager.PasswordSignInAsync(username, password, isPersistent: rememberMe, lockoutOnFailure: false);
         }
 
         public async Task LogoutUserAsync()

@@ -12,15 +12,15 @@ namespace FlavorFinder.Services
             _authRepository = authRepository;
         }
 
-        public async Task<bool> Register(string email, string password)
+        public async Task<bool> Register(string username, string email, string password)
         {
-            var result = await _authRepository.RegisterUserAsync(email, password);
+            var result = await _authRepository.RegisterUserAsync(username, email, password);
             return result.Succeeded;
         }
 
-        public async Task<bool> Login(string email, string password, bool rememberMe)
+        public async Task<bool> Login(string username, string password, bool rememberMe)
         {
-            var result = await _authRepository.LoginUserAsync(email, password, rememberMe);
+            var result = await _authRepository.LoginUserAsync(username, password, rememberMe);
             return result.Succeeded;
         }
 

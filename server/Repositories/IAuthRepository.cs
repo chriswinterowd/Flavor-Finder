@@ -4,8 +4,8 @@ namespace FlavorFinder.Repositories
 {
     public interface IAuthRepository
     {
-        Task<IdentityResult> RegisterUserAsync(string email, string password);
-        Task<SignInResult> LoginUserAsync(string email, string password, bool isPersistent);
+        Task<IdentityResult> RegisterUserAsync(string username, string email, string password);
+        Task<SignInResult> LoginUserAsync(string username, string password, bool isPersistent);
         Task LogoutUserAsync();
     }
 }

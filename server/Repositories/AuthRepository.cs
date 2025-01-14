@@ -20,9 +20,23 @@ namespace FlavorFinder.Repositories
             return await _userManager.CreateAsync(user, password);
         }
 
-        public async Task<SignInResult> LoginUserAsync(string username, string password, bool rememberMe)
+        public async Task<SignInResult> LoginUserAsync(string identifier, string password, bool rememberMe)
         {
-            return await _signInManager.PasswordSignInAsync(username, password, isPersistent: rememberMe, lockoutOnFailure: false);
+            //Check if input is email
+            var user = await _userManager.FindByEmailAsync(identifier);
+
+            //If not email then check if username exists
+            if (string.IsNullOrEmpty(user?.UserName))
+            {
+                user = await _userManager.FindByNameAsync(identifier);
+            }
+
+            //If username not found then sign in failed
+            if (string.IsNullOrEmpty(user?.UserName))
+            {
+                return SignInResult.Failed;
+            }
+            return await _signInManager.PasswordSignInAsync(user.UserName, password, isPersistent: rememberMe, lockoutOnFailure: false);
         }
 
         public async Task LogoutUserAsync()

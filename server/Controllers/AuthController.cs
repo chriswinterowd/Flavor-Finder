@@ -18,7 +18,7 @@ namespace FlavorFinder.Controllers
         [HttpPost("register")]
         public async Task<IActionResult> Register([FromBody] RegisterRequest request)
         {
-            var success = await _authService.Register(request.Username, request.Email, request.Password);
+            var success = await _authService.Register(request.UserName, request.Email, request.Password);
             if (!success)
             {
                 return BadRequest("Registration failed.");
@@ -26,9 +26,10 @@ namespace FlavorFinder.Controllers
             return Ok("Registration Successful.");
         }
 
+        [HttpPost("login")]
         public async Task<IActionResult> Login([FromBody] LoginRequest request)
         {
-            var success = await _authService.Login(request.Username, request.Password, request.RememberMe);
+            var success = await _authService.Login(request.UserName, request.Password, request.RememberMe);
             if (!success)
             {
                 return Unauthorized("Invalid login credentials.");

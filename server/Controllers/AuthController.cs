@@ -18,23 +18,41 @@ namespace FlavorFinder.Controllers
         [HttpPost("register")]
         public async Task<IActionResult> Register([FromBody] RegisterRequest request)
         {
-            var success = await _authService.Register(request.UserName, request.Email, request.Password);
-            if (!success)
+            var result = await _authService.Register(request.UserName, request.Email, request.Password);
+            if (result.Succeeded)
             {
-                return BadRequest("Registration failed.");
+                return Ok("Registration Successful.");
             }
-            return Ok("Registration Successful.");
+
+            var errors = result.Errors.Select(e => e.Description).ToList();
+            return BadRequest(new { Errors = errors });
         }
 
         [HttpPost("login")]
         public async Task<IActionResult> Login([FromBody] LoginRequest request)
         {
-            var success = await _authService.Login(request.UserName, request.Password, request.RememberMe);
-            if (!success)
+            var result = await _authService.Login(request.Identifier, request.Password, request.RememberMe);
+            if (result.Succeeded)
             {
-                return Unauthorized("Invalid login credentials.");
+                return Ok("Login successful.");
             }
-            return Ok("Login successful.");
+
+            var errors = new List<string>();
+
+            if (result.IsLockedOut)
+            {
+                errors.Add("Your account is locked. Please try again later.");
+            }
+            if (result.IsNotAllowed)
+            {
+                errors.Add("You are not allowed to log in at this time.");
+            }
+            if (!result.Succeeded)
+            {
+                errors.Add("Invalid username or password.");
+            }
+
+            return BadRequest(new { Errors = errors });
         }
 
         [HttpPost("logout")]

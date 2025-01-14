@@ -1,9 +1,11 @@
+using Microsoft.AspNetCore.Identity;
+
 namespace FlavorFinder.Services
 {
     public interface IAuthService
     {
-        Task<bool> Register(string username, string email, string password);
-        Task<bool> Login(string username, string password, bool rememberMe);
+        Task<IdentityResult> Register(string username, string email, string password);
+        Task<SignInResult> Login(string identifier, string password, bool rememberMe);
         Task Logout();
     }
 }

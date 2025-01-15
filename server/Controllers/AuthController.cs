@@ -59,7 +59,7 @@ namespace FlavorFinder.Controllers
         public async Task<IActionResult> Logout()
         {
             await _authService.Logout();
-            return Ok("Logout succesful.");
+            return Ok("Logout successful.");
         }
     }
 }

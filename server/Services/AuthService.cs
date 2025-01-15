@@ -14,7 +14,6 @@ namespace FlavorFinder.Services
 
         public async Task<IdentityResult> Register(string username, string email, string password)
         {
-            Console.WriteLine(username);
             var result = await _authRepository.RegisterUserAsync(username, email, password);
             return result;
         }

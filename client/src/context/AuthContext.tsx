@@ -1,4 +1,5 @@
 import React, { createContext, useContext, useState, ReactNode } from "react";
+import { useNotification } from "./NotificationContext";
 
 interface AuthContextType {
   isAuthenticated: boolean;
@@ -29,6 +30,7 @@ interface RegisterRequest {
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export function AuthProvider({ children }: { children: ReactNode }) {
+  const { showNotification } = useNotification();
   const [isAuthenticated, setIsAuthenticated] = useState(false);
 
   const login = async (
@@ -52,6 +54,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
       if (response.ok) {
         setIsAuthenticated(true);
+        showNotification("Login Successful!");
         return { success: true, errors: [] };
       } else {
         let errorData = await response.json();
@@ -65,8 +68,14 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   };
 
   const logout = async () => {
-    await fetch("http://localhost:5000/api/auth/logout", { method: "POST" });
-    setIsAuthenticated(false);
+    const response = await fetch("http://localhost:5000/api/auth/logout", { method: "POST" });
+
+    if (response.ok) {
+      showNotification("Logout Succesful!");
+      setIsAuthenticated(false);
+    } else {
+      showNotification("There was an error when attempting to log out.");
+    }
   };
 
   const register = async (
@@ -89,6 +98,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       });
 
       if (response.ok) {
+        showNotification("Registration Succesful!");
         return { success: true, errors: [] };
       } else {
         let errorData = await response.json();

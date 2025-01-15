@@ -22,12 +22,12 @@ export function AuthModal({ isOpen, onClose }: AuthModalProps) {
     e.preventDefault();
     setErrorMessage("");
 
-    const success = await login(identifier, password, true);
+    const { success, errors } = await login(identifier, password, true);
 
     if (success) {
-      onClose();
+      handleClose();
     } else {
-      setErrorMessage("Invalid email or password.");
+      setErrorMessage(errors.join(", "));
     }
   };
 
@@ -49,11 +49,16 @@ export function AuthModal({ isOpen, onClose }: AuthModalProps) {
     }
   };
 
+  const handleClose = async () => {
+    setErrorMessage("");
+    onClose();
+  };
+
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
       <div className="bg-white rounded-lg shadow-xl w-full max-w-md relative">
         <button
-          onClick={onClose}
+          onClick={handleClose}
           className="absolute right-4 top-4 text-gray-400 hover:text-gray-600"
         >
           <X size={20} />

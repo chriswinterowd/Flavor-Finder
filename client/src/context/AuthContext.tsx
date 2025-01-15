@@ -2,7 +2,11 @@ import React, { createContext, useContext, useState, ReactNode } from "react";
 
 interface AuthContextType {
   isAuthenticated: boolean;
-  login: (username: string, password: string, rememberMe: boolean) => Promise<boolean>;
+  login: (
+    username: string,
+    password: string,
+    rememberMe: boolean
+  ) => Promise<{ success: boolean; errors: string[] }>;
   logout: () => Promise<void>;
   register: (
     username: string,
@@ -31,7 +35,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     identifier: string,
     password: string,
     rememberMe: boolean
-  ): Promise<boolean> => {
+  ): Promise<{ success: boolean; errors: string[] }> => {
     try {
       const loginRequest: LoginRequest = {
         Identifier: identifier,
@@ -48,14 +52,15 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
       if (response.ok) {
         setIsAuthenticated(true);
-        return true;
+        return { success: true, errors: [] };
       } else {
-        console.error("Login failed: ", await response.text());
-        return false;
+        let errorData = await response.json();
+        let errors = errorData.errors || ["An unexpected error occured."];
+        return { success: false, errors: errors };
       }
     } catch (error) {
       console.error("Login error: ", error);
-      return false;
+      return { success: false, errors: ["A network or server error occurred."] };
     }
   };
 

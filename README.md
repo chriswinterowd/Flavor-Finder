@@ -56,7 +56,19 @@ Secure login functionality with an intuitive design.
      cd backend
      dotnet restore
      ```
-   - Update `appsettings.json` with your database and API credentials.
+   - Create or update the `appsettings.json` file with the following required fields:
+     ```json
+     {
+       "Spoonacular": {
+         "ApiKey": "YOUR_SPOONACULAR_API_KEY"
+       },
+       "ConnectionStrings": {
+         "DefaultConnection": "YOUR_DATABASE_CONNECTION_STRING"
+       }
+     }
+     ```
+   - Replace `YOUR_SPOONACULAR_API_KEY` with your Spoonacular API key.
+   - Replace `YOUR_DATABASE_CONNECTION_STRING` with the connection string for your PostgreSQL database.
    - Run the backend server:
      ```bash
      dotnet run

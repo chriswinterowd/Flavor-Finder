@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using FlavorFinder.Models.Entities;
+using FlavorFinder.Models;
 
 namespace FlavorFinder.Data
 {
@@ -12,13 +12,13 @@ namespace FlavorFinder.Data
 
         }
 
-        public DbSet<RecipeEntity> Recipes { get; set; }
+        public DbSet<Recipe> Recipes { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
 
-            modelBuilder.Entity<RecipeEntity>(entity =>
+            modelBuilder.Entity<Recipe>(entity =>
             {
                 entity.Property(r => r.Id)
                     .IsRequired()

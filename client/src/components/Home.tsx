@@ -1,13 +1,6 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import {
-  Coffee,
-  UtensilsCrossed,
-  Cookie,
-  IceCream,
-  Sandwich,
-  Shuffle,
-} from "lucide-react";
+import { Coffee, UtensilsCrossed, Cookie, IceCream, Sandwich, Shuffle } from "lucide-react";
 
 const mealTypes = [
   { name: "any", icon: Shuffle },
@@ -61,9 +54,7 @@ export function Home() {
   return (
     <main className="max-w-4xl mx-auto px-4 py-8">
       <div className="text-center mb-8">
-        <h1 className="text-4xl font-bold text-gray-900 mb-2">
-          Random Recipe Generator
-        </h1>
+        <h1 className="text-4xl font-bold text-gray-900 mb-2">Random Recipe Generator</h1>
         <p className="text-gray-600">Discover your next culinary adventure</p>
       </div>
       <div className="grid grid-cols-2 md:grid-cols-6 gap-4 mb-8">
@@ -72,9 +63,7 @@ export function Home() {
             key={name}
             onClick={() => setSelectedMeal(name)}
             className={`p-4 rounded-lg ${
-              selectedMeal === name
-                ? "bg-orange-100 border-orange-500"
-                : "bg-white border-gray-100"
+              selectedMeal === name ? "bg-orange-100 border-orange-500" : "bg-white border-gray-100"
             } shadow-sm hover:shadow-md transition-all duration-200 border flex flex-col items-center justify-center gap-2 group`}
           >
             <Icon
@@ -84,9 +73,7 @@ export function Home() {
               } group-hover:scale-110 transition-transform duration-200`}
             />
             <span
-              className={`${
-                selectedMeal === name ? "text-orange-600" : "text-gray-800"
-              } text-sm`}
+              className={`${selectedMeal === name ? "text-orange-600" : "text-gray-800"} text-sm`}
             >
               {name}
             </span>
@@ -94,9 +81,7 @@ export function Home() {
         ))}
       </div>
       <div className="bg-white rounded-lg p-6 shadow-sm mb-8">
-        <h2 className="text-xl font-semibold mb-4 text-gray-900">
-          Select Cuisine Type
-        </h2>
+        <h2 className="text-xl font-semibold mb-4 text-gray-900">Select Cuisine Type</h2>
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3">
           {cuisineTypes.map((cuisine) => (
             <button

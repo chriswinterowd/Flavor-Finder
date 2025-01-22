@@ -9,10 +9,12 @@ namespace FlavorFinder.Controllers
     public class RecipeController : ControllerBase
     {
         private readonly SpoonacularService _spoonacularService;
+        private readonly RecipeService _recipeService;
 
-        public RecipeController(SpoonacularService spoonacularService)
+        public RecipeController(SpoonacularService spoonacularService, RecipeService recipeService)
         {
             _spoonacularService = spoonacularService;
+            _recipeService = recipeService;
         }
 
         [HttpGet("random")]
@@ -20,19 +22,28 @@ namespace FlavorFinder.Controllers
         {
             try
             {
-                Console.WriteLine("parameters " + meal + cuisine);
                 var recipes = await _spoonacularService.GetRandomRecipes(number, meal, cuisine);
 
                 if (recipes == null || recipes.Count == 0)
                 {
-                    return NotFound("No recipes  found");
+                    return NotFound("No recipes found");
                 }
 
+                await _recipeService.SaveRecipesAsync(recipes);
                 return Ok(recipes);
             }
             catch (HttpRequestException ex)
             {
-                return StatusCode(500, $"Error fetching recipes: {ex.Message}");
+                Console.WriteLine($"API Error: {ex.Message}");
+
+                var fallbackRecipes = await _recipeService.GetRecipeByTagsAsync(meal, cuisine);
+
+                if (fallbackRecipes == null || !fallbackRecipes.Any())
+                {
+                    return NotFound("No recipes found in the database");
+                }
+
+                return Ok(fallbackRecipes);
             }
         }
     }

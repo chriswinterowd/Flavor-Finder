@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { X, Mail, Lock, User } from "lucide-react";
 import { useAuth } from "../context/AuthContext";
-import { useNotification } from "../context/NotificationContext";
 
 interface AuthModalProps {
   isOpen: boolean;

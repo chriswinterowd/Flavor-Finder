@@ -1,13 +1,6 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
-import {
-  Heart,
-  Clock,
-  Users,
-  UtensilsCrossed,
-  ChefHat,
-  Soup,
-} from "lucide-react";
+import { Heart, Clock, Users, UtensilsCrossed, ChefHat, Soup } from "lucide-react";
 
 interface Ingredient {
   id: number;
@@ -80,15 +73,12 @@ export function RecipeDisplay() {
     fetchRecipe();
   }, [meal, cuisine]);
 
-  if (!recipe)
-    return <div className="text-center text-gray-600">Loading...</div>;
+  if (!recipe) return <div className="text-center text-gray-600">Loading...</div>;
 
   return (
     <div className="max-w-4xl mx-auto px-4 py-8">
       <div className="mb-6">
-        <h1 className="text-3xl font-bold text-gray-900 mb-3">
-          {recipe.title}
-        </h1>
+        <h1 className="text-3xl font-bold text-gray-900 mb-3">{recipe.title}</h1>
         <div className="flex flex-wrap gap-2">
           {recipe.cuisines?.map((cuisine) => (
             <span
@@ -119,19 +109,10 @@ export function RecipeDisplay() {
         </div>
       </div>
       <div className="aspect-video w-full bg-gray-100 rounded-lg overflow-hidden mb-8">
-        <img
-          src={recipe.image}
-          alt={recipe.title}
-          className="w-full h-full object-cover"
-        />
+        <img src={recipe.image} alt={recipe.title} className="w-full h-full object-cover" />
       </div>
       <div className="bg-white rounded-lg p-6 shadow-sm mb-8">
-        <p
-          className="text-gray-700"
-          dangerouslySetInnerHTML={{
-            __html: recipe.summary || "",
-          }}
-        ></p>
+        <p className="text-gray-700">{recipe.summary || ""}</p>
       </div>
       <div className="bg-white rounded-lg p-6 shadow-sm mb-8">
         <h2 className="text-xl font-semibold mb-4 flex items-center gap-2">
@@ -166,9 +147,7 @@ export function RecipeDisplay() {
         <ol className="space-y-6">
           {recipe.analyzedInstructions?.[0]?.steps?.map((instruction) => (
             <li key={instruction.number} className="flex gap-4">
-              <span className="font-bold text-orange-600 text-lg">
-                {instruction.number}.
-              </span>
+              <span className="font-bold text-orange-600 text-lg">{instruction.number}.</span>
               <p className="text-gray-700">{instruction.step}</p>
             </li>
           ))}

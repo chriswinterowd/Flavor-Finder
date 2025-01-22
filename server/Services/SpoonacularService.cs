@@ -1,9 +1,5 @@
-using System.Net.Http;
 using System.Text.Json;
-using System.Threading.Tasks;
-using System.Collections.Generic;
 using FlavorFinder.Models;
-using Microsoft.Extensions.Configuration;
 
 namespace FlavorFinder.Services
 {
@@ -24,12 +20,11 @@ namespace FlavorFinder.Services
             var baseUrl = "https://api.spoonacular.com/recipes/random";
 
             var tags = string.Join(",", new[] { meal, cuisine }.Where(tag => !string.IsNullOrWhiteSpace(tag)));
-            Console.WriteLine("tags " + tags + " " + meal + cuisine + string.IsNullOrWhiteSpace(tags));
+
             var queryParams = $"number={number}" + (!string.IsNullOrWhiteSpace(tags) ? $"&include-tags={tags}" : "") + $"&apiKey={_apiKey}";
 
             var apiUrl = $"{baseUrl}?{queryParams}";
 
-            Console.WriteLine(apiUrl);
             var response = await _httpClient.GetAsync(apiUrl);
 
             if (!response.IsSuccessStatusCode)

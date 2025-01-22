@@ -1,6 +1,6 @@
 using System.Text.Json.Serialization;
 
-namespace FlavorFinder.Models
+namespace FlavorFinder.Models.API
 {
     public class Recipe
     {

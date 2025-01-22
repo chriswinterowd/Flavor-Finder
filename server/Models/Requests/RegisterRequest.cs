@@ -1,4 +1,4 @@
-namespace FlavorFinder.Models
+namespace FlavorFinder.Models.Requests
 {
     public class RegisterRequest
     {

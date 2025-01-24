@@ -1,6 +1,8 @@
 using FlavorFinder.Services;
 using FlavorFinder.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc.Infrastructure;
 
 namespace FlavorFinder.Controllers
 {
@@ -55,6 +57,20 @@ namespace FlavorFinder.Controllers
             return BadRequest(new { Errors = errors });
         }
 
+        [HttpGet("check")]
+        public IActionResult CheckAuthentication()
+        {
+            if (User.Identity?.IsAuthenticated == true)
+            {
+                return Ok(new { IsAuthenticated = true });
+            }
+            else
+            {
+                return Ok(new { IsAuthenticated = false });
+            }
+        }
+
+        [Authorize]
         [HttpPost("logout")]
         public async Task<IActionResult> Logout()
         {

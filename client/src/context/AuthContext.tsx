@@ -1,4 +1,4 @@
-import { createContext, useContext, useState, ReactNode } from "react";
+import { createContext, useContext, useState, useEffect, ReactNode } from "react";
 import { useNotification } from "./NotificationContext";
 
 interface AuthContextType {
@@ -33,6 +33,30 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const { showNotification } = useNotification();
   const [isAuthenticated, setIsAuthenticated] = useState(false);
 
+  useEffect(() => {
+    const checkAuthStatus = async () => {
+      try {
+        const response = await fetch("http://localhost:5000/api/auth/check", {
+          method: "GET",
+          credentials: "include",
+        });
+
+        if (response.ok) {
+          let data = await response.json();
+          console.log(data);
+          setIsAuthenticated(data.isAuthenticated);
+        } else {
+          setIsAuthenticated(false);
+        }
+      } catch (error) {
+        console.error("Error checking authentication status:", error);
+        setIsAuthenticated(false);
+      }
+    };
+
+    checkAuthStatus();
+  }, []);
+
   const login = async (
     identifier: string,
     password: string,
@@ -50,6 +74,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
           "Content-Type": "application/json",
         },
         body: JSON.stringify(loginRequest),
+        credentials: "include",
       });
 
       if (response.ok) {
@@ -68,7 +93,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   };
 
   const logout = async () => {
-    const response = await fetch("http://localhost:5000/api/auth/logout", { method: "POST" });
+    const response = await fetch("http://localhost:5000/api/auth/logout", {
+      method: "POST",
+      credentials: "include",
+    });
 
     if (response.ok) {
       showNotification("Logout Succesful!");

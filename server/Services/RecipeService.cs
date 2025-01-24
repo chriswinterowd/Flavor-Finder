@@ -2,7 +2,7 @@ using FlavorFinder.Models;
 using FlavorFinder.Repositories;
 namespace FlavorFinder.Services
 {
-    public class RecipeService
+    public class RecipeService : IRecipeService
     {
         private readonly IRecipeRepository _recipeRepository;
 
@@ -11,24 +11,31 @@ namespace FlavorFinder.Services
             _recipeRepository = recipeRepository;
         }
 
-        public async Task SaveRecipesAsync(List<Recipe> Recipes)
+        public async Task SaveRecipeAsync(Recipe recipeToSave)
         {
-            foreach (var recipe in Recipes)
+
+            try
             {
-                try
-                {
-                    await _recipeRepository.AddAsync(recipe);
-                }
-                catch (Exception ex)
-                {
-                    Console.WriteLine($"Error saving recipe ID {recipe.Id}: {ex.Message}");
-                }
+                await _recipeRepository.AddAsync(recipeToSave);
             }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error saving recipe ID {recipeToSave.Id}: {ex.Message}");
+            }
+
         }
 
-        public async Task<List<Recipe>> GetRecipeByTagsAsync(string meal, string cuisine)
+        public async Task<Recipe?> GetRandomRecipeAsync(string meal, string cuisine)
         {
-            return await _recipeRepository.GetRandomByTagsAsync(meal, cuisine);
+            var recipes = await _recipeRepository.GetRecipesAsync(meal, cuisine);
+
+            if (recipes.Count == 0)
+            {
+                return null;
+            }
+
+            var randomIndex = new Random().Next(recipes.Count);
+            return recipes[randomIndex];
         }
     }
 }

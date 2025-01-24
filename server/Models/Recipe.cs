@@ -18,7 +18,7 @@ namespace FlavorFinder.Models
         public List<string> Cuisines { get; set; }
 
         public List<Ingredient> ExtendedIngredients { get; set; } = new List<Ingredient>();
-        public List<Instruction> AnalyzedInstructions { get; set; } = new List<Instruction>();
+        public List<RecipeInstructions> AnalyzedInstructions { get; set; } = new List<RecipeInstructions>();
 
     }
 

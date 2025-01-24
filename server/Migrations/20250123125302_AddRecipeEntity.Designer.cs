@@ -2,7 +2,7 @@
 using System;
 using System.Collections.Generic;
 using FlavorFinder.Data;
-using FlavorFinder.Models.Entities;
+using FlavorFinder.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Migrations;
@@ -14,7 +14,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace server.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20250122111656_AddRecipeEntity")]
+    [Migration("20250123125302_AddRecipeEntity")]
     partial class AddRecipeEntity
     {
         /// <inheritdoc />
@@ -27,12 +27,15 @@ namespace server.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
-            modelBuilder.Entity("FlavorFinder.Models.Entities.RecipeEntity", b =>
+            modelBuilder.Entity("FlavorFinder.Models.Recipe", b =>
                 {
                     b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("integer");
 
-                    b.Property<List<InstructionEntity>>("AnalyzedInstructions")
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<List<Instruction>>("AnalyzedInstructions")
                         .IsRequired()
                         .HasColumnType("jsonb");
 
@@ -44,7 +47,7 @@ namespace server.Migrations
                         .IsRequired()
                         .HasColumnType("jsonb");
 
-                    b.Property<List<IngredientEntity>>("ExtendedIngredients")
+                    b.Property<List<Ingredient>>("ExtendedIngredients")
                         .IsRequired()
                         .HasColumnType("jsonb");
 

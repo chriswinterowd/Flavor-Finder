@@ -9,41 +9,42 @@ namespace FlavorFinder.Controllers
     public class RecipeController : ControllerBase
     {
         private readonly SpoonacularService _spoonacularService;
-        private readonly RecipeService _recipeService;
+        private readonly IRecipeService _recipeService;
 
-        public RecipeController(SpoonacularService spoonacularService, RecipeService recipeService)
+        public RecipeController(SpoonacularService spoonacularService, IRecipeService recipeService)
         {
             _spoonacularService = spoonacularService;
             _recipeService = recipeService;
         }
 
         [HttpGet("random")]
-        public async Task<ActionResult<List<Recipe>>> GetRandomRecipes([FromQuery] int number = 1, string meal = "", string cuisine = "")
+        public async Task<ActionResult<Recipe>> GetRandomRecipes([FromQuery] string meal = "", string cuisine = "")
         {
             try
             {
-                var recipes = await _spoonacularService.GetRandomRecipes(number, meal, cuisine);
+                var recipe = await _spoonacularService.GetRandomRecipe(meal, cuisine);
 
-                if (recipes == null || recipes.Count == 0)
+                if (recipe == null)
                 {
                     return NotFound("No recipes found");
                 }
 
-                await _recipeService.SaveRecipesAsync(recipes);
-                return Ok(recipes);
+                await _recipeService.SaveRecipeAsync(recipe);
+                Console.WriteLine("sending " + recipe);
+                return Ok(recipe);
             }
             catch (HttpRequestException ex)
             {
                 Console.WriteLine($"API Error: {ex.Message}");
 
-                var fallbackRecipes = await _recipeService.GetRecipeByTagsAsync(meal, cuisine);
+                var fallbackRecipe = await _recipeService.GetRandomRecipeAsync(meal, cuisine);
 
-                if (fallbackRecipes == null || !fallbackRecipes.Any())
+                if (fallbackRecipe == null)
                 {
                     return NotFound("No recipes found in the database");
                 }
 
-                return Ok(fallbackRecipes);
+                return Ok(fallbackRecipe);
             }
         }
     }

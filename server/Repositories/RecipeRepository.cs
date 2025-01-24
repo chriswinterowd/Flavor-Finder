@@ -24,12 +24,11 @@ namespace FlavorFinder.Repositories
             await _context.SaveChangesAsync();
         }
 
-        public async Task<List<Recipe>?> GetRandomByTagsAsync(int number, string meal, string cuisine)
+        public async Task<List<Recipe>> GetRecipesAsync(string meal, string cuisine)
         {
             return await _context.Recipes
                 .Where(r => r.DishTypes.Contains(meal) && r.Cuisines.Contains(cuisine))
-                .OrderBy(r => EF.Functions.Random())
-                .FirstOrDefaultAsync();
+                .ToListAsync();
         }
     }
 }

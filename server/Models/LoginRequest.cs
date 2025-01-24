@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace FlavorFinder.Models.Requests
+namespace FlavorFinder.Models
 {
     public class LoginRequest
     {

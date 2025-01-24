@@ -15,13 +15,13 @@ namespace FlavorFinder.Services
             _apiKey = configuration["Spoonacular:ApiKey"];
         }
 
-        public async Task<List<Recipe>> GetRandomRecipes(int number = 1, string meal = "", string cuisine = "")
+        public async Task<Recipe?> GetRandomRecipe(string meal = "", string cuisine = "")
         {
             var baseUrl = "https://api.spoonacular.com/recipes/random";
 
             var tags = string.Join(",", new[] { meal, cuisine }.Where(tag => !string.IsNullOrWhiteSpace(tag)));
 
-            var queryParams = $"number={number}" + (!string.IsNullOrWhiteSpace(tags) ? $"&include-tags={tags}" : "") + $"&apiKey={_apiKey}";
+            var queryParams = $"number=1" + (!string.IsNullOrWhiteSpace(tags) ? $"&include-tags={tags}" : "") + $"&apiKey={_apiKey}";
 
             var apiUrl = $"{baseUrl}?{queryParams}";
 
@@ -34,9 +34,13 @@ namespace FlavorFinder.Services
 
             var json = await response.Content.ReadAsStringAsync();
 
-            var spoonacularResponse = JsonSerializer.Deserialize<SpoonacularResponse>(json);
+            var options = new JsonSerializerOptions
+            {
+                PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
+            };
+            var spoonacularResponse = JsonSerializer.Deserialize<SpoonacularResponse>(json, options);
 
-            return spoonacularResponse?.Recipes ?? new List<Recipe>();
+            return spoonacularResponse?.Recipes?.FirstOrDefault();
         }
     }
 

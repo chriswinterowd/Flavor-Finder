@@ -20,9 +20,7 @@ namespace FlavorFinder.Data
 
             modelBuilder.Entity<Recipe>(entity =>
             {
-                entity.Property(r => r.Id)
-                    .IsRequired()
-                    .ValueGeneratedNever();
+                entity.HasKey(r => r.Id);
 
                 entity.Property(r => r.Title)
                     .IsRequired();

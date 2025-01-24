@@ -1,5 +1,5 @@
 using FlavorFinder.Services;
-using FlavorFinder.Models.Requests;
+using FlavorFinder.Models;
 using Microsoft.AspNetCore.Mvc;
 
 namespace FlavorFinder.Controllers

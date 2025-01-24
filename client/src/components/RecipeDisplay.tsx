@@ -54,16 +54,21 @@ export function RecipeDisplay() {
           }&cuisine=${cuisine === "any" ? "" : cuisine}`
         );
 
+        if (!response.ok) {
+          if (response.status === 404) {
+            console.error("No recipes found (404 Not Found).");
+            setRecipe(null);
+          } else {
+            console.error(`Error: HTTP ${response.status}`);
+            setRecipe(null);
+          }
+          return;
+        }
+
         const data = await response.json();
 
         console.log(data);
-
-        if (Array.isArray(data) && data.length > 0) {
-          setRecipe(data[0]);
-        } else {
-          console.error("No recipes found in the response.");
-          setRecipe(null);
-        }
+        setRecipe(data);
       } catch (error) {
         console.error("Failed to fetch recipe:", error);
         setRecipe(null);
@@ -112,7 +117,7 @@ export function RecipeDisplay() {
         <img src={recipe.image} alt={recipe.title} className="w-full h-full object-cover" />
       </div>
       <div className="bg-white rounded-lg p-6 shadow-sm mb-8">
-        <p className="text-gray-700">{recipe.summary || ""}</p>
+        <p className="text-gray-700">{recipe.summary.replace(/<\/?[^>]+(>|$)/g, "")}</p>
       </div>
       <div className="bg-white rounded-lg p-6 shadow-sm mb-8">
         <h2 className="text-xl font-semibold mb-4 flex items-center gap-2">

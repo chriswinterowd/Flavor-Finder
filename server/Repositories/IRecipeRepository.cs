@@ -6,6 +6,6 @@ namespace FlavorFinder.Repositories
     {
         Task<Recipe?> GetByIdAsync(int id);
         Task AddAsync(Recipe recipe);
-        Task<Recipe?> GetRandomByTagsAsync(string meal, string cuisine);
+        Task<List<Recipe>> GetRecipesAsync(string meal, string cuisine);
     }
 }

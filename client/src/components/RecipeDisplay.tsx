@@ -125,11 +125,8 @@ export function RecipeDisplay() {
           Ingredients
         </h2>
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
-          {recipe.extendedIngredients?.map((ingredient) => (
-            <div
-              key={ingredient.id}
-              className="flex items-center gap-2 bg-orange-50/50 rounded p-2"
-            >
+          {recipe.extendedIngredients?.map((ingredient, index) => (
+            <div key={index} className="flex items-center gap-2 bg-orange-50/50 rounded p-2">
               {ingredient.image && (
                 <img
                   src={`https://spoonacular.com/cdn/ingredients_100x100/${ingredient.image}`}
@@ -150,8 +147,8 @@ export function RecipeDisplay() {
           Instructions
         </h2>
         <ol className="space-y-6">
-          {recipe.analyzedInstructions?.[0]?.steps?.map((instruction) => (
-            <li key={instruction.number} className="flex gap-4">
+          {recipe.analyzedInstructions?.[0]?.steps?.map((instruction, index) => (
+            <li key={index} className="flex gap-4">
               <span className="font-bold text-orange-600 text-lg">{instruction.number}.</span>
               <p className="text-gray-700">{instruction.step}</p>
             </li>

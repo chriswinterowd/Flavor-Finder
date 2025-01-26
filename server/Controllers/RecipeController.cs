@@ -3,6 +3,7 @@ using FlavorFinder.Services;
 using FlavorFinder.Models;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.VisualBasic;
 
 namespace FlavorFinder.Controllers
 {
@@ -19,8 +20,8 @@ namespace FlavorFinder.Controllers
             _recipeService = recipeService;
         }
 
-        /*[Authorize]
-        [HttpPost("favorite")]
+        [Authorize]
+        [HttpPost("favorite/{recipeId}")]
         public async Task<IActionResult> FavoriteRecipe(int recipeId)
         {
             var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
@@ -30,18 +31,43 @@ namespace FlavorFinder.Controllers
                 return BadRequest("User ID was not found");
             }
 
-            var result = await _recipeService.FavoriteRecipe(userId, recipeId);
+            await _recipeService.FavoriteRecipeAsync(userId, recipeId);
 
-            if (result)
-            {
-                return Ok();
-            }
-
-            return BadRequest("Recipe was not added to favorites.")
+            return Ok("Recipe was added to favorites.");
 
         }
-        */
 
+        [Authorize]
+        [HttpDelete("favorite/{recipeId}")]
+        public async Task<IActionResult> UnfavoriteRecipe(int recipeId)
+        {
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+            if (string.IsNullOrEmpty(userId))
+            {
+                return BadRequest("User ID was not found");
+            }
+
+            await _recipeService.UnfavoriteRecipeAsync(userId, recipeId);
+
+            return Ok("Recipe was removed from favorites");
+        }
+
+        [Authorize]
+        [HttpGet("favorites")]
+        public async Task<ActionResult<List<Favorite>>> GetUserFavorites()
+        {
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+            if (string.IsNullOrEmpty(userId))
+            {
+                return BadRequest("User ID was not found");
+            }
+            var favorites = await _recipeService.GetUserFavoritesAsync(userId);
+
+            return Ok(favorites);
+
+        }
 
         [HttpGet("random")]
         public async Task<ActionResult<Recipe>> GetRandomRecipes([FromQuery] string meal = "", string cuisine = "")

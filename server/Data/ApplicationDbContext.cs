@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using FlavorFinder.Models;
+using Microsoft.AspNetCore.Identity;
 
 namespace FlavorFinder.Data
 {
@@ -13,7 +14,7 @@ namespace FlavorFinder.Data
         }
 
         public DbSet<Recipe> Recipes { get; set; }
-
+        public DbSet<Favorite> Favorites { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
@@ -36,6 +37,16 @@ namespace FlavorFinder.Data
 
                 entity.Property(r => r.AnalyzedInstructions)
                     .HasColumnType("jsonb");
+            });
+
+            modelBuilder.Entity<Favorite>(entity =>
+            {
+                entity.HasKey(f => new { f.UserId, f.RecipeId });
+
+                entity.HasOne<IdentityUser>()
+                    .WithMany()
+                    .HasForeignKey(f => f.UserId)
+                    .OnDelete(DeleteBehavior.Cascade);
             });
         }
     }

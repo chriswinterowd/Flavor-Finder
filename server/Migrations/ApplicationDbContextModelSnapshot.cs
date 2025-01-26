@@ -24,6 +24,19 @@ namespace server.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
+            modelBuilder.Entity("FlavorFinder.Models.Favorite", b =>
+                {
+                    b.Property<string>("UserId")
+                        .HasColumnType("text");
+
+                    b.Property<int>("RecipeId")
+                        .HasColumnType("integer");
+
+                    b.HasKey("UserId", "RecipeId");
+
+                    b.ToTable("Favorites");
+                });
+
             modelBuilder.Entity("FlavorFinder.Models.Recipe", b =>
                 {
                     b.Property<int>("Id")
@@ -32,7 +45,7 @@ namespace server.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
-                    b.Property<List<Instruction>>("AnalyzedInstructions")
+                    b.Property<List<RecipeInstructions>>("AnalyzedInstructions")
                         .IsRequired()
                         .HasColumnType("jsonb");
 
@@ -263,6 +276,15 @@ namespace server.Migrations
                     b.HasKey("UserId", "LoginProvider", "Name");
 
                     b.ToTable("AspNetUserTokens", (string)null);
+                });
+
+            modelBuilder.Entity("FlavorFinder.Models.Favorite", b =>
+                {
+                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", null)
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

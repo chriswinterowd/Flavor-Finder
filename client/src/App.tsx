@@ -18,7 +18,8 @@ const App = () => {
             <Navbar onOpenAuthModal={() => setIsAuthModalOpen(true)} />
             <Routes>
               <Route path="/" element={<Home />} />
-              <Route path="/recipe" element={<RecipeDisplay />} />
+              <Route path="/recipe/random" element={<RecipeDisplay />} />
+              <Route path="/recipe/:recipeId" element={<RecipeDisplay />} />
             </Routes>
             <AuthModal isOpen={isAuthModalOpen} onClose={() => setIsAuthModalOpen(false)} />
           </Router>

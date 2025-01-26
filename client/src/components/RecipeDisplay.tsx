@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useNavigate, useLocation } from "react-router-dom";
+import { useNavigate, useLocation, useParams } from "react-router-dom";
 import { Heart, Clock, Users, UtensilsCrossed, ChefHat, Soup } from "lucide-react";
 
 interface Ingredient {
@@ -34,6 +34,7 @@ interface Recipe {
 
 export function RecipeDisplay() {
   const [recipe, setRecipe] = useState<Recipe | null>(null);
+  const { recipeId } = useParams();
   const location = useLocation();
 
   const queryParams = new URLSearchParams(location.search);
@@ -48,11 +49,19 @@ export function RecipeDisplay() {
   useEffect(() => {
     const fetchRecipe = async () => {
       try {
-        const response = await fetch(
-          `http://localhost:5000/api/recipe/random?number=1&meal=${
-            meal === "any" ? "" : meal
-          }&cuisine=${cuisine === "any" ? "" : cuisine}`
-        );
+        let url;
+
+        if (recipeId) {
+          url = `http:localhost:5000/api/recipe/${recipeId}`;
+        } else {
+          const query = new URLSearchParams();
+          if (meal && meal !== "any") query.append("meal", meal);
+          if (cuisine && cuisine !== "any") query.append("cuisine", cuisine);
+
+          url = `http:localhost:5000/api/recipe/random?${query.toString()}`;
+        }
+
+        const response = await fetch(url);
 
         if (!response.ok) {
           if (response.status === 404) {

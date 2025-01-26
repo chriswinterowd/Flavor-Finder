@@ -48,7 +48,7 @@ export function Home() {
   const navigate = useNavigate();
 
   const handleFindFlavor = () => {
-    navigate(`/recipe?meal=${selectedMeal}&cuisine=${selectedCuisine}`);
+    navigate(`/recipe/random?meal=${selectedMeal}&cuisine=${selectedCuisine}`);
   };
 
   return (

@@ -1,7 +1,9 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useLocation, useParams } from "react-router-dom";
 import { Heart, Clock, Users, UtensilsCrossed, ChefHat, Soup } from "lucide-react";
-
+import axios from "axios";
+import { useNotification } from "../context/NotificationContext";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 interface Ingredient {
   id: number;
   name: string;
@@ -33,61 +35,80 @@ interface Recipe {
 }
 
 export function RecipeDisplay() {
-  const [recipe, setRecipe] = useState<Recipe | null>(null);
+  const [favorite, setFavorite] = useState<Boolean>(false);
+  const { showNotification } = useNotification();
   const { recipeId } = useParams();
   const location = useLocation();
-
+  const queryClient = useQueryClient();
   const queryParams = new URLSearchParams(location.search);
   const meal = queryParams.get("meal");
   const cuisine = queryParams.get("cuisine");
-
   const navigate = useNavigate();
-  const handleFindNewFlavor = () => {
-    navigate("/");
-  };
 
-  useEffect(() => {
-    const fetchRecipe = async () => {
-      try {
-        let url;
+  const {
+    data: recipe,
+    isLoading: recipeLoading,
+    isError: recipeError,
+  } = useQuery<Recipe>({
+    queryKey: ["recipe", recipeId || "random", { meal, cuisine }],
+    queryFn: async () => {
+      const url = recipeId
+        ? `http://localhost:5000/api/recipe/${recipeId}`
+        : `http://localhost:5000/api/recipe/random?${meal && meal != "any" ? `meal=${meal}&` : ""}${
+            cuisine && cuisine != "any" ? `cuisine=${cuisine}` : ""
+          }`;
+      const response = await axios.get(url, { withCredentials: true });
+      return response.data;
+    },
+  });
 
-        if (recipeId) {
-          url = `http:localhost:5000/api/recipe/${recipeId}`;
-        } else {
-          const query = new URLSearchParams();
-          if (meal && meal !== "any") query.append("meal", meal);
-          if (cuisine && cuisine !== "any") query.append("cuisine", cuisine);
+  const { data: isFavorited, isLoading: favoriteLoading } = useQuery<boolean>({
+    queryKey: ["isFavorited", recipe?.id],
+    queryFn: async () => {
+      const url = `http://localhost:5000/api/recipe/favorite/${recipe?.id}`;
+      const response = await axios.get(url, { withCredentials: true });
+      return response.data.isFavorited;
+    },
+    enabled: !!recipe?.id,
+  });
 
-          url = `http:localhost:5000/api/recipe/random?${query.toString()}`;
-        }
+  const favoriteMutation = useMutation({
+    mutationFn: async () => {
+      if (!recipe?.id) throw new Error("Recipe ID is not defined.");
+      const url = `http://localhost:5000/api/recipe/favorite/${recipe?.id}`;
+      await axios.post(url, {}, { withCredentials: true });
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["isFavorited", recipe?.id] });
+      showNotification("Recipe favorited!");
+    },
+    onError: () => {
+      showNotification("Error favoriting recipe");
+    },
+  });
 
-        const response = await fetch(url);
+  const unfavoriteMutation = useMutation({
+    mutationFn: async () => {
+      if (!recipe?.id) throw new Error("Recipe ID is not defined.");
+      const url = `http://localhost:5000/api/recipe/favorite/${recipe?.id}`;
+      await axios.delete(url, { withCredentials: true });
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["isFavorited", recipe?.id] });
+      showNotification("Recipe unfavorited!");
+    },
+    onError: () => {
+      showNotification("Error unfavoriting recipe");
+    },
+  });
 
-        if (!response.ok) {
-          if (response.status === 404) {
-            console.error("No recipes found (404 Not Found).");
-            setRecipe(null);
-          } else {
-            console.error(`Error: HTTP ${response.status}`);
-            setRecipe(null);
-          }
-          return;
-        }
+  if (recipeLoading || favoriteLoading) {
+    return <div className="text-center text-gray-600">Loading...</div>;
+  }
 
-        const data = await response.json();
-
-        console.log(data);
-        setRecipe(data);
-      } catch (error) {
-        console.error("Failed to fetch recipe:", error);
-        setRecipe(null);
-      }
-    };
-
-    fetchRecipe();
-  }, [meal, cuisine]);
-
-  if (!recipe) return <div className="text-center text-gray-600">Loading...</div>;
+  if (recipeError) {
+    return <div className="text-center text-red-600">Failed to fetch recipe.</div>;
+  }
 
   return (
     <div className="max-w-4xl mx-auto px-4 py-8">
@@ -167,14 +188,21 @@ export function RecipeDisplay() {
       <div className="flex justify-center gap-4 mt-8">
         <button
           className="px-6 py-3 bg-orange-600 text-white rounded-md hover:bg-orange-700 transition-colors font-semibold flex items-center gap-2"
-          onClick={handleFindNewFlavor}
+          onClick={() => navigate("/")}
         >
           <ChefHat size={20} />
           Find New Flavor
         </button>
-        <button className="px-6 py-3 border-2 border-orange-600 text-orange-600 rounded-md hover:bg-orange-50 transition-colors font-semibold flex items-center gap-2">
+        <button
+          className={`px-6 py-3 border-2 ${
+            favorite
+              ? "border-red-600 bg-red-600 text-white hover:bg-red-700"
+              : "border-orange-600 text-orange-600 rounded-md hover:bg-orange-600 hover:text-white"
+          } rounded-md transition-colors font-semibold flex items-center gap-2`}
+          onClick={() => (isFavorited ? unfavoriteMutation.mutate() : favoriteMutation.mutate())}
+        >
           <Heart size={20} />
-          Favorite
+          {isFavorited ? "Unfavorite" : "Favorite"}
         </button>
       </div>
     </div>

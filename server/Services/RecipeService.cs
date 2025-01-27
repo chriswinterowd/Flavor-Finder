@@ -40,6 +40,10 @@ namespace FlavorFinder.Services
             return recipes[randomIndex];
         }
 
+        public async Task<Recipe?> GetRecipeByIdAsync(int recipeId)
+        {
+            return await _recipeRepository.GetByIdAsync(recipeId);
+        }
         public async Task FavoriteRecipeAsync(string userId, int recipeId)
         {
             var favorite = new Favorite { UserId = userId, RecipeId = recipeId };
@@ -57,5 +61,12 @@ namespace FlavorFinder.Services
         {
             return await _favoriteRepository.GetFavoritesByUserIdAsync(userId);
         }
+
+        public async Task<bool> IsRecipeFavoritedAsync(string userId, int recipeId)
+        {
+            var favorite = new Favorite { UserId = userId, RecipeId = recipeId };
+            return await _favoriteRepository.IsFavoriteAsync(favorite);
+        }
+
     }
 }

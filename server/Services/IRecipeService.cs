@@ -15,6 +15,8 @@ namespace FlavorFinder.Services
 
         Task<List<Favorite>> GetUserFavoritesAsync(string userId);
 
+        Task<bool> IsRecipeFavoritedAsync(string userId, int recipeId);
 
+        Task<Recipe?> GetRecipeByIdAsync(int recipeId);
     }
 }

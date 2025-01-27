@@ -21,6 +21,21 @@ namespace FlavorFinder.Controllers
         }
 
         [Authorize]
+        [HttpGet("favorite/{recipeId}")]
+        public async Task<ActionResult<Boolean>> IsFavorited(int recipeId)
+        {
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+            if (string.IsNullOrEmpty(userId))
+            {
+                return BadRequest("User ID was not found");
+            }
+
+            var isFavorited = await _recipeService.IsRecipeFavoritedAsync(userId, recipeId);
+
+            return Ok(new { isFavorited });
+        }
+        [Authorize]
         [HttpPost("favorite/{recipeId}")]
         public async Task<IActionResult> FavoriteRecipe(int recipeId)
         {
@@ -69,6 +84,12 @@ namespace FlavorFinder.Controllers
 
         }
 
+        [HttpGet("{recipeId}")]
+        public async Task<ActionResult<Recipe>> GetRecipe(int recipeId)
+        {
+            var recipe = await _recipeService.GetRecipeByIdAsync(recipeId);
+            return Ok(recipe);
+        }
         [HttpGet("random")]
         public async Task<ActionResult<Recipe>> GetRandomRecipes([FromQuery] string meal = "", string cuisine = "")
         {
@@ -82,7 +103,7 @@ namespace FlavorFinder.Controllers
                 }
 
                 await _recipeService.SaveRecipeAsync(recipe);
-                Console.WriteLine("sending " + recipe);
+
                 return Ok(recipe);
             }
             catch (HttpRequestException ex)
@@ -99,5 +120,7 @@ namespace FlavorFinder.Controllers
                 return Ok(fallbackRecipe);
             }
         }
+
+
     }
 }

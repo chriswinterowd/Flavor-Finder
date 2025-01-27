@@ -1,5 +1,6 @@
 import { createContext, useContext, useState, useEffect, ReactNode } from "react";
 import { useNotification } from "./NotificationContext";
+import axios from "axios";
 
 interface AuthContextType {
   isAuthenticated: boolean;

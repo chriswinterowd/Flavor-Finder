@@ -30,5 +30,11 @@ namespace FlavorFinder.Repositories
                 .Where(f => f.UserId == userId)
                 .ToListAsync();
         }
+
+        public async Task<bool> IsFavoriteAsync(Favorite favorite)
+        {
+            return await _context.Favorites
+                .AnyAsync(f => f.UserId == favorite.UserId && f.RecipeId == favorite.RecipeId);
+        }
     }
 }

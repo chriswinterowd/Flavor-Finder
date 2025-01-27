@@ -13,6 +13,12 @@ namespace FlavorFinder.Repositories
             _context = context;
         }
 
+        public async Task<List<Recipe>> GetByIdsAsync(List<int> recipeIds)
+        {
+            return await _context.Recipes
+                .Where(r => recipeIds.Contains(r.Id))
+                .ToListAsync();
+        }
         public async Task<Recipe?> GetByIdAsync(int id)
         {
             return await _context.Recipes.FirstOrDefaultAsync(r => r.Id == id);

@@ -5,6 +5,7 @@ import { AuthProvider } from "./context/AuthContext";
 import { Navbar } from "./components/Navbar";
 import { Home } from "./components/Home";
 import { RecipeDisplay } from "./components/RecipeDisplay";
+import { Favorites } from "./components/Favorites";
 import { AuthModal } from "./components/AuthModal";
 import { NotificationProvider } from "./context/NotificationContext";
 
@@ -24,6 +25,7 @@ const App = () => {
                 <Route path="/" element={<Home />} />
                 <Route path="/recipe/random" element={<RecipeDisplay />} />
                 <Route path="/recipe/:recipeId" element={<RecipeDisplay />} />
+                <Route path="/favorites" element={<Favorites />} />
               </Routes>
               <AuthModal isOpen={isAuthModalOpen} onClose={() => setIsAuthModalOpen(false)} />
             </Router>

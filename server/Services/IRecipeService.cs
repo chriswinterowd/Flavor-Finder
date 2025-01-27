@@ -13,7 +13,7 @@ namespace FlavorFinder.Services
 
         Task UnfavoriteRecipeAsync(string userId, int recipeId);
 
-        Task<List<Favorite>> GetUserFavoritesAsync(string userId);
+        Task<List<Recipe>> GetUserFavoritesAsync(string userId);
 
         Task<bool> IsRecipeFavoritedAsync(string userId, int recipeId);
 

@@ -57,9 +57,14 @@ namespace FlavorFinder.Services
             await _favoriteRepository.RemoveAsync(favorite);
         }
 
-        public async Task<List<Favorite>> GetUserFavoritesAsync(string userId)
+        public async Task<List<Recipe>> GetUserFavoritesAsync(string userId)
         {
-            return await _favoriteRepository.GetFavoritesByUserIdAsync(userId);
+            var favorites = await _favoriteRepository.GetFavoritesByUserIdAsync(userId);
+            var recipeIds = favorites.Select(f => f.RecipeId).ToList();
+
+            var recipes = await _recipeRepository.GetByIdsAsync(recipeIds);
+
+            return recipes;
         }
 
         public async Task<bool> IsRecipeFavoritedAsync(string userId, int recipeId)
